@@ -2,16 +2,31 @@
 
 function App() {
   console.log('test');
+
+  const todoList = new TodoList;
+
+  const addTodoForm = document.querySelector('#add-todo-form');
+  const inputTodoForm = document.querySelector('#input-todo');
+  const todoListElement = document.querySelector('#todo-list');
+
+  addTodoForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const todoItem = new TodoItem(inputTodoForm.value);
+    todoList.add(todoItem);
+    console.log(todoList.makeHTML());
+    todoListElement.appendChild(todoList.makeHTML());
+  });
+
 }
 
-class todoList {
+class TodoList {
   constructor() {
     this.list = [];
   }
 
   /**
    * リストにtodoを追加
-   * @param {todoItem} todoItem 追加するtodo
+   * @param {TodoItem} todoItem 追加するtodo
    */
   add(todoItem) {
     this.list.push(todoItem);
@@ -19,16 +34,33 @@ class todoList {
 
   /**
    * リストからtodoを削除
-   * @param {todoItem} todoItem 削除するtodo
+   * @param {TodoItem} todoItem 削除するtodo
    */
   delete(todoItem) {
     this.list = this.list.filter((item) => {
       return item !== todoItem;
     })
   }
+
+  /**
+   * リストからHTMLを作成して返す
+   */
+  makeHTML() {
+    const ulElement = document.createElement('ul');
+    this.list.forEach(todoItem => {
+      const liElement = document.createElement('li');
+      liElement.innerHTML = todoItem.task;
+      ulElement.appendChild(liElement);
+    });
+    return ulElement;
+  }
 }
 
-class todoItem {
+class TodoItem {
+  /**
+   * constructor
+   * @param {String} task タスクの内容
+   */
   constructor(task) {
     this.task = task;
     this.taskDone = false;
