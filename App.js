@@ -8,6 +8,7 @@ function App() {
   const addTodoForm = document.querySelector('#add-todo-form');
   const inputTodoForm = document.querySelector('#input-todo');
   const todoListElement = document.querySelector('#todo-list');
+  const ulElement = document.querySelector('ul-list');
 
   addTodoForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -16,14 +17,32 @@ function App() {
     renderTodoListElement();
   });
 
+
+
   /**
    * TODOリストの表示を更新
    */
   function renderTodoListElement() {
+    const newUlElement = document.createElement('ul');
+    newUlElement.setAttribute('id', 'ul-list');
+    todoList.list.forEach(todoItem => {
+      const liElement = document.createElement('li');
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute('type', 'checkbox');
+      inputElement.setAttribute('id', todoItem.index);
+      inputElement.setAttribute('class', 'todo-item');
+      if (todoItem.taskDone) {
+        inputElement.setAttribute('checked');
+      }
+      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task}`;
+      newUlElement.appendChild(liElement);
+    });
     while (todoListElement.firstChild) {
       todoListElement.removeChild(todoListElement.firstChild);
+      console.log('f')
     }
-    todoListElement.appendChild(todoList.makeHTML());
+    
+    todoListElement.appendChild(newUlElement);
   }
 }
 
@@ -50,27 +69,6 @@ class TodoList {
     });
   }
 
-  /**
-   * リストからHTMLを作成する
-   */
-  makeHTML() {
-    const ulElement = document.createElement('ul');
-    ulElement.setAttribute = document
-    this.list.forEach(todoItem => {
-      const liElement = document.createElement('li');
-
-      const inputElement = document.createElement('input');
-      inputElement.setAttribute('type', 'checkbox');
-      inputElement.setAttribute('id', todoItem.index);
-      inputElement.setAttribute('class', 'todo-index');
-      if (todoItem.taskDone) {
-        inputElement.setAttribute('checked');
-      }
-      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task}`;
-      ulElement.appendChild(liElement);
-    });
-    return ulElement;
-  }
 }
 
 let todoIndex = 0;
