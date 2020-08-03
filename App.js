@@ -13,10 +13,18 @@ function App() {
     event.preventDefault();
     const todoItem = new TodoItem(inputTodoForm.value);
     todoList.add(todoItem);
-    console.log(todoList.makeHTML());
-    todoListElement.appendChild(todoList.makeHTML());
+    renderTodoListElement();
   });
 
+  /**
+   * TODOリストの表示を更新
+   */
+  function renderTodoListElement() {
+    while (todoListElement.firstChild) {
+      todoListElement.removeChild(todoListElement.firstChild);
+    }
+    todoListElement.appendChild(todoList.makeHTML());
+  }
 }
 
 class TodoList {
@@ -39,29 +47,40 @@ class TodoList {
   delete(todoItem) {
     this.list = this.list.filter((item) => {
       return item !== todoItem;
-    })
+    });
   }
 
   /**
-   * リストからHTMLを作成して返す
+   * リストからHTMLを作成する
    */
   makeHTML() {
     const ulElement = document.createElement('ul');
+    ulElement.setAttribute = document
     this.list.forEach(todoItem => {
       const liElement = document.createElement('li');
-      liElement.innerHTML = todoItem.task;
+
+      const inputElement = document.createElement('input');
+      inputElement.setAttribute('type', 'checkbox');
+      inputElement.setAttribute('id', todoItem.index);
+      inputElement.setAttribute('class', 'todo-index');
+      if (todoItem.taskDone) {
+        inputElement.setAttribute('checked');
+      }
+      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task}`;
       ulElement.appendChild(liElement);
     });
     return ulElement;
   }
 }
 
+let todoIndex = 0;
 class TodoItem {
   /**
    * constructor
    * @param {String} task タスクの内容
    */
   constructor(task) {
+    this.index = todoIndex++;
     this.task = task;
     this.taskDone = false;
   }
