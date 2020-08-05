@@ -8,7 +8,8 @@ function App() {
   const addTodoForm = document.querySelector('#add-todo-form');
   const inputTodoForm = document.querySelector('#input-todo');
   const todoListElement = document.querySelector('#todo-list');
-  const ulElement = document.querySelector('ul-list');
+  const ulElement = document.querySelector('#ul-list');
+  const doneCheckBoxClass = ulElement.querySelector('.done');
 
   addTodoForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -16,7 +17,6 @@ function App() {
     todoList.add(todoItem);
     renderTodoListElement();
   });
-
 
 
   /**
@@ -30,19 +30,29 @@ function App() {
       const inputElement = document.createElement('input');
       inputElement.setAttribute('type', 'checkbox');
       inputElement.setAttribute('id', todoItem.index);
-      inputElement.setAttribute('class', 'todo-item');
+      inputElement.setAttribute('class', 'done');
       if (todoItem.taskDone) {
         inputElement.setAttribute('checked');
       }
       liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task}`;
+      
+      // checkbox 後で修正
+      liElement.querySelector('.done').addEventListener('change', () => {
+        todoItem.taskDone = !todoItem.taskDone;
+        console.log(todoItem.taskDone);
+      })
+
       newUlElement.appendChild(liElement);
+      
     });
     while (todoListElement.firstChild) {
       todoListElement.removeChild(todoListElement.firstChild);
       console.log('f')
     }
-    
+
+
     todoListElement.appendChild(newUlElement);
+
   }
 }
 
