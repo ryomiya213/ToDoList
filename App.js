@@ -1,20 +1,19 @@
 'use strict';
 
 function App() {
-  console.log('test');
 
   const todoList = new TodoList;
 
   const addTodoForm = document.querySelector('#add-todo-form');
   const inputTodoForm = document.querySelector('#input-todo');
   const todoListElement = document.querySelector('#todo-list');
-  const ulElement = document.querySelector('#ul-list');
-  const doneCheckBoxClass = ulElement.querySelector('.done');
+
 
   addTodoForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const todoItem = new TodoItem(inputTodoForm.value);
     todoList.add(todoItem);
+    inputTodoForm.value = '';
     renderTodoListElement();
   });
 
@@ -34,20 +33,30 @@ function App() {
       if (todoItem.taskDone) {
         inputElement.setAttribute('checked');
       }
-      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task}`;
+
+      const deleteButton = document.createElement('button');
+      deleteButton.innerHTML = '削除';
+      deleteButton.setAttribute('class', 'delete');
+      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task} ${deleteButton.outerHTML}`;
       
       // checkbox 後で修正
       liElement.querySelector('.done').addEventListener('change', () => {
         todoItem.taskDone = !todoItem.taskDone;
         console.log(todoItem.taskDone);
-      })
+      });
+
+      liElement.querySelector('.delete').addEventListener('click', () => {
+        todoList.delete(todoItem);
+        renderTodoListElement();
+        console.log(todoList.list)
+      });
+
 
       newUlElement.appendChild(liElement);
       
     });
     while (todoListElement.firstChild) {
       todoListElement.removeChild(todoListElement.firstChild);
-      console.log('f')
     }
 
 
