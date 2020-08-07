@@ -11,10 +11,12 @@ function App() {
 
   addTodoForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const todoItem = new TodoItem(inputTodoForm.value);
-    todoList.add(todoItem);
-    inputTodoForm.value = '';
-    renderTodoListElement();
+    if (inputTodoForm.value !== '') {
+      const todoItem = new TodoItem(inputTodoForm.value);
+      todoList.add(todoItem);
+      inputTodoForm.value = '';
+      renderTodoListElement();
+    }
   });
 
 
@@ -30,19 +32,25 @@ function App() {
       inputElement.setAttribute('type', 'checkbox');
       inputElement.setAttribute('id', todoItem.index);
       inputElement.setAttribute('class', 'done');
-      if (todoItem.taskDone) {
-        inputElement.setAttribute('checked');
-      }
 
       const deleteButton = document.createElement('button');
       deleteButton.innerHTML = '削除';
       deleteButton.setAttribute('class', 'delete');
-      liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task} ${deleteButton.outerHTML}`;
+
+      // タスク完了で打ち消し線を追加する
+      if (todoItem.taskDone) {
+        console.log('checked');
+        const todoItemElement = document.createElement('s');
+        todoItemElement.innerHTML = todoItem.task;
+        liElement.innerHTML = `${inputElement.outerHTML} ${todoItemElement.outerHTML} ${deleteButton.outerHTML}`;
+      } else {
+        liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task} ${deleteButton.outerHTML}`;
+      }
       
-      // checkbox 後で修正
       liElement.querySelector('.done').addEventListener('change', () => {
         todoItem.taskDone = !todoItem.taskDone;
         console.log(todoItem.taskDone);
+        renderTodoListElement();
       });
 
       liElement.querySelector('.delete').addEventListener('click', () => {
@@ -51,17 +59,12 @@ function App() {
         console.log(todoList.list)
       });
 
-
       newUlElement.appendChild(liElement);
-      
     });
     while (todoListElement.firstChild) {
       todoListElement.removeChild(todoListElement.firstChild);
     }
-
-
     todoListElement.appendChild(newUlElement);
-
   }
 }
 
