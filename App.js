@@ -28,10 +28,15 @@ function App() {
     newUlElement.setAttribute('id', 'ul-list');
     todoList.list.forEach(todoItem => {
       const liElement = document.createElement('li');
+
       const inputElement = document.createElement('input');
       inputElement.setAttribute('type', 'checkbox');
       inputElement.setAttribute('id', todoItem.index);
       inputElement.setAttribute('class', 'done');
+
+      const changeButton = document.createElement('button');
+      changeButton.innerHTML = '変更';
+      changeButton.setAttribute('class', 'change');
 
       const deleteButton = document.createElement('button');
       deleteButton.innerHTML = '削除';
@@ -42,15 +47,19 @@ function App() {
         console.log('checked');
         const todoItemElement = document.createElement('s');
         todoItemElement.innerHTML = todoItem.task;
-        liElement.innerHTML = `${inputElement.outerHTML} ${todoItemElement.outerHTML} ${deleteButton.outerHTML}`;
+        liElement.innerHTML = `${inputElement.outerHTML} ${todoItemElement.outerHTML} ${changeButton.outerHTML} ${deleteButton.outerHTML}`;
       } else {
-        liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task} ${deleteButton.outerHTML}`;
+        liElement.innerHTML = `${inputElement.outerHTML} ${todoItem.task} ${changeButton.outerHTML} ${deleteButton.outerHTML}`;
       }
       
       liElement.querySelector('.done').addEventListener('change', () => {
         todoItem.taskDone = !todoItem.taskDone;
         console.log(todoItem.taskDone);
         renderTodoListElement();
+      });
+
+      liElement.querySelector('.change').addEventListener('change', () => {
+        //
       });
 
       liElement.querySelector('.delete').addEventListener('click', () => {
