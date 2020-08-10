@@ -46,10 +46,13 @@ function App() {
       // タスク完了で打ち消し線を追加する
       if (todoItem.taskDone) {
         console.log('checked');
+        checkboxElement.setAttribute('checked', 'ture');
+        //
         const todoItemElement = document.createElement('s');
         todoItemElement.innerHTML = todoItem.task;
         liElement.innerHTML = `${checkboxElement.outerHTML} ${inputElement.outerHTML} ${deleteButton.outerHTML}`;
       } else {
+        checkboxElement.removeAttribute('checked');
         liElement.innerHTML = `${checkboxElement.outerHTML} ${inputElement.outerHTML} ${deleteButton.outerHTML}`;
       }
       
