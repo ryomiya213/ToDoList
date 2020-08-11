@@ -47,13 +47,17 @@ function App() {
       if (todoItem.taskDone) {
         console.log('checked');
         checkboxElement.setAttribute('checked', 'ture');
-        //
         const todoItemElement = document.createElement('s');
         todoItemElement.innerHTML = todoItem.task;
-        liElement.innerHTML = `${checkboxElement.outerHTML} ${inputElement.outerHTML} ${deleteButton.outerHTML}`;
+        liElement.innerHTML = `${checkboxElement.outerHTML} ${todoItemElement.outerHTML} ${deleteButton.outerHTML}`;
       } else {
         checkboxElement.removeAttribute('checked');
         liElement.innerHTML = `${checkboxElement.outerHTML} ${inputElement.outerHTML} ${deleteButton.outerHTML}`;
+
+        liElement.querySelector('.change').addEventListener('change', () => {
+          console.log(liElement.querySelector('.change').value);
+          todoItem.changeTask(liElement.querySelector('.change').value);
+        })
       }
       
       liElement.querySelector('.done').addEventListener('change', () => {
