@@ -78,6 +78,10 @@ function App() {
       todoListElement.removeChild(todoListElement.firstChild);
     }
     todoListElement.appendChild(newUlElement);
+
+    const counterElement = document.createElement('p');
+    counterElement.innerHTML = `${todoList.countDone()}/${todoList.list.length}件`
+    todoListElement.appendChild(counterElement);
   }
 }
 
@@ -102,6 +106,19 @@ class TodoList {
     this.list = this.list.filter((item) => {
       return item !== todoItem;
     });
+  }
+
+  /**
+   * タスク完了した件数を返す
+   */
+  countDone() {
+    let count = 0;
+    this.list.forEach(todo => {
+      if (todo.taskDone) {
+        count ++;
+      }
+    });
+    return count;
   }
 
 }
